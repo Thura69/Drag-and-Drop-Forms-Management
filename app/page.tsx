@@ -9,6 +9,7 @@ import { FaWpforms } from "react-icons/fa";
 import { HiCursorClick } from "react-icons/hi";
 import { TbArrowBounce } from "react-icons/tb";
 import { Separator } from '@/components/ui/separator';
+import CreateFormBtn from '@/components/CreateFormBtn';
 
 export default async function Home() {
   return (
@@ -16,11 +17,12 @@ export default async function Home() {
     
     <div className='container p-4'>
         <Suspense fallback={<StatsCards loading={true} />}>
-          <CardStatsWrapper/>
+        <CardStatsWrapper/>
         </Suspense>
         <Separator className='my-6' />
         <h2 className=' text-4xl font-bold col-span-2'>Your forms</h2>
-        <Separator className='my-6'/>
+        <Separator className='my-6' />
+        <CreateFormBtn/>
     </div>
   </Layout>
   )
