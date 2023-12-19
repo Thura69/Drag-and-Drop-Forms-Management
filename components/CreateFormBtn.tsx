@@ -44,11 +44,12 @@ function CreateFormBtn() {
 
   async  function onSubmit(values: formSchemaType) {
         try {
-            await CreateForm(values);
+        const formId =    await CreateForm(values);
             toast({
                 title: "Success",
-                description:"Form created successfully"
-            })
+                description: "Form created successfully"
+            });
+          
         } catch (error) {
           toast({
               title: "Error",
@@ -61,7 +62,10 @@ function CreateFormBtn() {
   return (
    <Dialog>
     <DialogTrigger asChild>
-        <Button>Create new form</Button>
+              <Button variant={'outline'} className='group  border border-primary/20 h-[190px] justify-center items-center flex flex-col hover:border-primary hover:cursor-pointer border-dashed gap-4 bg-background'>
+              <RxFilePlus className="h-8 w-8 text-muted-foreground group-hover:text-primary"/>
+              <p className=' text-muted-foreground text-lg font-md group-hover:text-primary'>Create New Form</p>    
+              </Button>
     </DialogTrigger>
     <DialogContent>
         <DialogHeader>

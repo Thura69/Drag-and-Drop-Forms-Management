@@ -1,6 +1,6 @@
 import Image from 'next/image'
 import Layout from './(dashboard)/layout'
-import { GetFormStats } from '@/actions/form'
+import { GetFormStats, GetForms } from '@/actions/form'
 import { LuView } from "react-icons/lu";
 import { ReactNode, Suspense } from 'react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
@@ -22,7 +22,9 @@ export default async function Home() {
         <Separator className='my-6' />
         <h2 className=' text-4xl font-bold col-span-2'>Your forms</h2>
         <Separator className='my-6' />
-        <CreateFormBtn/>
+        <div className='grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3'>
+            <CreateFormBtn/>
+        </div>
     </div>
   </Layout>
   )
@@ -116,4 +118,12 @@ function StatsCard({
       <p className=' text-xs text-muted-foreground pt-1'>{helper}</p>
     </CardContent>
   </Card>
+}
+
+function FormCardSkeleton() {
+  return <Skeleton className='border-2 border-primary/20 h-[190px] w-full'/>
+}
+
+async function FormCards() {
+  const forms = await GetForms();
 }
