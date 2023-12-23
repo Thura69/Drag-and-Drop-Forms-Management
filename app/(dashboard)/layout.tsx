@@ -12,8 +12,7 @@ function Layout({children}:{children:ReactNode}) {
         <ThemeSwicher/>
         <UserButton afterSignOutUrl='/sign-in'/>
       </div>
-       </nav>
-       
+       </nav> 
        <main className='flex w-full flex-grow'>{children}</main>
       </div>
   )
