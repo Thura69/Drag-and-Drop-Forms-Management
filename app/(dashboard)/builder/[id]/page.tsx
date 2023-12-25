@@ -11,6 +11,8 @@ import React from 'react'
 
 async function PageBuilder({ params }: { params: { id: string } }) {
 
+    console.log(params)
+
     const form = await GetFormById(Number(params.id));
     if (!form) {
         throw new Error("Form not found!");

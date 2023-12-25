@@ -45,12 +45,12 @@ function CreateFormBtn() {
 
   async  function onSubmit(values: formSchemaType) {
         try {
-        const formId =    await CreateForm(values);
+            const formId = await CreateForm(values);
             toast({
                 title: "Success",
                 description: "Form created successfully"
             });
-            router.push(`/builder/${formId}`);
+            router.push(`/builder/${formId.id}`);
         } catch (error) {
           toast({
               title: "Error",
