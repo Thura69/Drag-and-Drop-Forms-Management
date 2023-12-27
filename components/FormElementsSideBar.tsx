@@ -17,6 +17,10 @@ export const FormElementsSideBar = () => {
             <SideBarButtonElement formElements={FormElements.SpacerField} />
             <p className=' text-sm text-muted-foreground col-span-1 md:col-span-2 my-2 place-self-start'>Form Elements</p>
              <SideBarButtonElement formElements={FormElements.TextField} />
+             <SideBarButtonElement formElements={FormElements.NumberField} />
+             <SideBarButtonElement formElements={FormElements.TextAreaField} />
+             <SideBarButtonElement formElements={FormElements.DateField} />
+             <SideBarButtonElement formElements={FormElements.SelectField} />
             
            </div>
     </div>

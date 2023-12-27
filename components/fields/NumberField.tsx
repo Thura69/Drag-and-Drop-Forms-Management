@@ -11,14 +11,16 @@ import { useDesigner } from '../hooks/useDesigner';
 import { Form, FormControl, FormDescription, FormField, FormItem, FormLabel, FormMessage } from '../ui/form';
 import { Switch } from '../ui/switch';
 import { cn } from '@/lib/utils';
+import { Bs123 } from 'react-icons/bs';
 
-const type: ElementsType = 'TextField';
+
+const type: ElementsType = 'NumberField';
 
 const extraAttribute = {
-    label: "Text Field",
+    label: "Number Field",
     helperText: "Helper Text",
     require: false,
-    placeHolder: "value here...."
+    placeHolder: "0"
 };
 
 const propertiesFormSchema = z.object({
@@ -32,7 +34,7 @@ type CustomeInstance = FormElementInstance & {
     extraAttribute: typeof extraAttribute
 }
 
-export const TextFieldFormElement: FormElement = {
+export const NumberFieldFormElement: FormElement = {
     type,
     construct: (id: string) => ({
         id,
@@ -40,8 +42,8 @@ export const TextFieldFormElement: FormElement = {
         extraAttribute,
     }),
     designerBtnElement: {
-        icon: MdTextFields,
-        label: "Text Field"
+        icon: Bs123,
+        label: "Number Field"
     },
     designerComponent: DesignerComponent,
     formComponent: FormComponent,
@@ -90,12 +92,13 @@ function FormComponent({
         {required && "*"}
       </Label>
       <Input
+        type='number'
         className={cn(error && "border-red-500")}
         placeholder={placeHolder}
         onChange={(e) => setValue(e.target.value)}
         onBlur={(e) => {
           if (!submitValue) return;
-          const valid = TextFieldFormElement.validate(element, e.target.value);
+          const valid = NumberFieldFormElement.validate(element, e.target.value);
           setError(!valid);
           if (!valid) return;
           submitValue(element.id, e.target.value);
@@ -126,8 +129,7 @@ function PropertiesComponent({ elementInstance }: { elementInstance: FormElement
     }, [element, form]);
     
 
-  function applyChanges(values: propertiesFormSchemaType) {
-      console.log("values",values)
+    function applyChanges(values: propertiesFormSchemaType) {
         updateElements(element.id, {
             ...element,
             extraAttribute: {
@@ -137,7 +139,7 @@ function PropertiesComponent({ elementInstance }: { elementInstance: FormElement
     }
 
     return <Form {...form}>
-        <form onBlur={form.handleSubmit(applyChanges)} onSubmit={(e)=>{e.preventDefault()}} className=' space-y-3 '>
+        <form onBlur={form.handleSubmit(applyChanges)} onChange={form.handleSubmit(applyChanges)} onSubmit={(e)=>{e.preventDefault()}} className=' space-y-3 '>
             <FormField
             control={form.control}
             name="label"
@@ -223,10 +225,10 @@ function DesignerComponent({ elementInstance }: { elementInstance: FormElementIn
             {label}
             {required}
         </Label>
-        <Input readOnly disabled placeholder={placeHolder} />
+        <Input readOnly disabled type='number' placeholder={placeHolder} />
         {
             helperText && (
-                <p className=' text-muted-foreground'>{helperText}</p>
+                <p className=' text-muted-foreground text-[0.8rem]'>{helperText}</p>
             )
         }
     </div>   

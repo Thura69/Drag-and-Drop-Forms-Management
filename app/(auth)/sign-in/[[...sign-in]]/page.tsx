@@ -3,7 +3,7 @@ import React from 'react'
 
 function Page() {
   return (
-   <SignIn/>
+   <div className=' bg-background'><SignIn/></div>
   )
 }
 

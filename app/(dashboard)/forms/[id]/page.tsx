@@ -109,17 +109,21 @@ async function SubmisstionTable({ id }: { id: number }) {
   FromElement.forEach((element) => {
     switch (element.type) {
       case "TextField":
+      case "NumberField":
+      case "TextAreaField":
+      case "DateField":
+      case "SelectField":
         columns.push({
           id: element.id,
           label: element.extraAttribute?.label,
-          require: element.extraAttribute?.require,
-          type: element.type
+          require: element.extraAttribute?.required,
+          type: element.type,
         });
         break;
       default:
-        break
+        break;
     }
-  })
+  });
 
   type Row = { [key: string]: string } & { submittedAt: Date };
 

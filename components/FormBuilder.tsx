@@ -89,7 +89,7 @@ function FormBuilder({ form }: { form: Form }) {
                 </Link>
               </Button>
               <Button asChild variant={'link'}>
-                <Link href={`/froms/${form.id}`} className='gap-2'>
+                <Link href={`/forms/${form.id}`} className="gap-2">
                   Form details
                   <BiSolidArrowToRight />
                 </Link>
@@ -121,7 +121,7 @@ function FormBuilder({ form }: { form: Form }) {
           }
               </div>
             </nav>
-            <div className='flex bg-[url(/paper.svg)] dark:bg-[url(/paper_dark.svg)] overflow-y-auto flex-grow items-center justify-center w-full relative bg-accent'>
+            <div className='bg-[url(/paper.svg)] dark:bg-[url(/paper_dark.svg)] flex w-full flex-grow items-center justify-center relative overflow-y-auto h-[200px] bg-accent'>
               <Designer/>
             </div>
           </main>
