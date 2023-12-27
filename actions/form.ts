@@ -99,22 +99,23 @@ export async function GetFormById(id:number) {
     })
 };
 
-export async function UpdateFormContent(id:number,jsonContent:string) {
-    const user = await currentUser();
-    if (!user) {
-        throw new UserNotFoundErr();
-    }
+export async function UpdateFormContent(id: number, jsonContent: string) {
+  const user = await currentUser();
+  if (!user) {
+    throw new UserNotFoundErr();
+  }
 
-    return await prisma.form.update({
-        where: {
-            userId: user.id,
-            id
-        },
-        data: {
-            content:jsonContent
-        }
-    })
-};
+  return await prisma.form.update({
+    where: {
+      userId: user.id,
+      id,
+    },
+    data: {
+      content: jsonContent
+    },
+  });
+}
+
 
 export async function PublishForm(id: number) {
      const user = await currentUser();
@@ -129,6 +130,68 @@ export async function PublishForm(id: number) {
         },
         data: {
             published:true
+        }
+    })
+};
+
+export async function GetFormContentByURL(sareURL: string) {
+       const user = await currentUser();
+    if (!user) {
+        throw new UserNotFoundErr();
+    }
+
+    return await prisma.form.update({
+        select: {
+            content:true
+        },
+        data: {
+            visits: {
+                increment:1
+            }
+        },
+        where: {
+            shareURL:sareURL
+        }
+    })
+};
+
+
+export async function SubmitForm(formUrl: string, content: string) {
+     const user = await currentUser();
+    if (!user) {
+        throw new UserNotFoundErr();
+    }
+
+    return await prisma.form.update({
+        data: {
+            submissions: {
+                increment:1
+            },
+            FormSubmissions: {
+                create: {
+                    content
+                }
+            }
+        },
+        where: {
+            shareURL:formUrl
+        }
+    })
+    
+};
+
+export async function GetFormWithSubmission(id: number) {
+     const user = await currentUser();
+    if (!user) {
+        throw new UserNotFoundErr();
+    }
+
+    return await prisma.form.findUnique({
+        where: {
+            id
+        },
+        include: {
+            FormSubmissions:true
         }
     })
 }

@@ -1,17 +1,20 @@
 
 
-import { GetFormById } from '@/actions/form';
+import { GetFormById, GetFormWithSubmission } from '@/actions/form';
 import Designer from '@/components/Designer';
 import FormBuilder from '@/components/FormBuilder';
 import { FormLinkShare } from '@/components/FormLinkShare';
+import { ElementsType, FormElementInstance } from '@/components/FromElements';
 import PreviewDialogBtn from '@/components/PreviewDialogBtn';
 import PublishFormBtn from '@/components/PublishFormBtn';
 import SaveFormBtn from '@/components/SaveFormBtn';
 import { VisitBtn } from '@/components/VisitBtn';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Skeleton } from '@/components/ui/skeleton';
+import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
 import { DndContext } from '@dnd-kit/core';
-import React, { ReactNode } from 'react'
+import { formatDistance } from 'date-fns';
+import React, { ElementType, ReactNode } from 'react'
 import { FaWpforms } from 'react-icons/fa';
 import { HiCursorClick } from 'react-icons/hi';
 import { LuView } from 'react-icons/lu';
@@ -48,7 +51,7 @@ async function PageBuilder({ params }: { params: { id: string } }) {
             <FormLinkShare shareUrl={form.shareURL} />
           </div>
       </div>
-      <div className='w-full pt-8 gap-4 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4'>
+      <div className='w-full container mx-auto pt-8 gap-4 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4'>
     <StatsCard
       title="Total visits"
       value={visits.toLocaleString() || ""}
@@ -81,9 +84,108 @@ async function PageBuilder({ params }: { params: { id: string } }) {
       loading={false}
       className={cardStyle}
     />
-  </div>
+      </div>
+      <div className='container pt-10'>
+        <SubmisstionTable id={form.id} />
+      </div>
     </>
   )
+}
+
+
+async function SubmisstionTable({ id }: { id: number }) {
+  const form = await GetFormWithSubmission(id);
+  console.log("Forms", form);
+  if (!form) throw new Error("Form not found");
+
+  const FromElement = JSON.parse(form?.content) as FormElementInstance[];
+  const columns: {
+    id: string,
+    label: string,
+    require: boolean,
+    type: ElementsType
+  }[] = [];
+
+  FromElement.forEach((element) => {
+    switch (element.type) {
+      case "TextField":
+        columns.push({
+          id: element.id,
+          label: element.extraAttribute?.label,
+          require: element.extraAttribute?.require,
+          type: element.type
+        });
+        break;
+      default:
+        break
+    }
+  })
+
+  type Row = { [key: string]: string } & { submittedAt: Date };
+
+  const rows: Row[] = [];
+  form.FormSubmissions.forEach((submisstion) => {
+    const content = JSON.parse(submisstion.content);
+    rows.push({
+      ...content,
+      submittedAt:submisstion.createAt
+    })
+  })
+
+
+  return <>
+    <h1 className='text-2xl font-bold my-4'>Submission</h1>
+    <div className='border rounded-md'>
+      <Table>
+        <TableHeader>
+          <TableRow>
+            {
+              columns.map((column) => (
+                <TableHead key={column.id} className=' uppercase'>{column.label}</TableHead>
+              ))
+            }
+            <TableHead className=' text-muted-foreground text-right uppercase'>Submitted at</TableHead>
+          </TableRow>
+        </TableHeader>
+        <TableBody>
+          {
+            rows.map((row, index) => (
+              <TableRow key={index}>
+                {
+                  columns.map((column, index) => (
+                    <RowCell
+                    key={index}
+                    type={column.type}
+                    value={row[column.id]}
+                    />
+                  ))
+                }
+                <TableCell className=' text-muted-foreground text-right'>
+                  {
+                    formatDistance(row.submittedAt, new Date(), {
+                      addSuffix:true
+                    })
+                  }
+                </TableCell>
+              </TableRow>
+            ))
+          }
+        </TableBody>
+      </Table>
+    </div>
+  </>
+}
+
+function RowCell({ type, value }:
+  {
+    type: ElementsType,
+    value:string
+  }) {
+  let node: ReactNode = value;
+
+  console.log("value node",node)
+
+  return <TableCell>{node}</TableCell>
 }
 
 function StatsCard({

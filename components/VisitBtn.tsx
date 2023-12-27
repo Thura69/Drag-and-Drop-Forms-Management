@@ -8,14 +8,15 @@ export const VisitBtn = ({shareUrl}:{shareUrl:string}) => {
     useEffect(() => {
         setMounted(true);
     }, []);
-    const shareLink =  `${window.location.origin}/submit/${shareUrl}`;
+  
   
     if (!mounted) {
       return null 
-  }
+    }
+    const shareLink =  `${window.location.origin}/submit/${shareUrl}`;
   return (
       <Button className='w-[200px]' onClick={() => {
           window.open(shareLink,"_blank")
-    }}>VisitBtn</Button>
+    }}>Visit</Button>
   )
 }
